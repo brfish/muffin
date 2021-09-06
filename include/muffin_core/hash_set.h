@@ -4,7 +4,7 @@
 #include "muffin_core/common.h"
 #include "muffin_core/hash.h"
 
-typedef struct MufHashSet_s { } MufHashSet;
+typedef struct MufHashSet_s MufHashSet;
 
 typedef struct MufHashSetConfig_s {
     muf_usize elementSize;

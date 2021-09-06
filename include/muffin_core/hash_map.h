@@ -4,7 +4,7 @@
 #include "muffin_core/common.h"
 #include "muffin_core/hash.h"
 
-typedef struct MufHashMap_s { } MufHashMap;
+typedef struct MufHashMap_s MufHashMap;
 
 typedef struct MufHashMapConfig_s {
     muf_usize keySize;
