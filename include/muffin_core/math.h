@@ -111,6 +111,10 @@ static MUF_INLINE muf_f64 mufClamplf(muf_f64 value, muf_f64 minv, muf_f64 maxv) 
 
 #define mufAbslf(Value) fabs(Value)
 
+#define mufSwapInt(A, B) (((A) ^ (B)) && ((B) ^= (A) ^= (B), (A) ^= (B)))
+
+#define mufSwap(Type, A, B) do { Type tmp = A; A = B; B = tmp; } while (0)
+
 MUF_API muf_bool mufFloatEqualEpsilon(muf_f64 a, muf_f64 b, muf_f64 epsilon);
 
 MUF_API muf_u32 mufBitsFindFirstSet(muf_u32 bits);
@@ -184,7 +188,6 @@ MUF_API void mufSetRandomSeed(muf_i32 seed);
 MUF_API muf_i32 mufGetRandomSeed(void);
 MUF_API muf_i32 mufRandom(muf_i32 minValue, muf_i32 maxValue);
 
-#pragma region MUF_VECTOR
 typedef struct MufVec2_s {
     muf_f32 x, y;
 } MufVec2;
@@ -328,9 +331,7 @@ MUF_API MufVec3 mufVec3Normalize(MufVec3 v);
 #define mufVecCast_3_2(V) (MufVec3) { V.x, V.y, 0.0F }
 
 #define mufVecCast(DstDimension, SrcDimension, Value)
-#pragma endregion
 
-#pragma region MUF_COLOR
 typedef struct MufColor_s {
 	muf_f32 r, g, b;
 } MufColor;
@@ -362,8 +363,6 @@ MUF_API MufRGBA mufRGBASub(MufRGBA c1, MufRGBA c2);
 MUF_API MufRGBA mufRGBAMul(MufRGBA c1, MufRGBA c2);
 MUF_API MufRGBA mufRGBAScale(MufRGBA c, muf_f32 s);
 
-#pragma endregion
-
 typedef struct MufQuat4_s {
 	muf_f32 x, y, z, w;
 } MufQuat4;
@@ -371,7 +370,6 @@ typedef struct MufQuat4_s {
 MufQuat4 mufCreateQuat4(muf_f32 x, muf_f32 y, muf_f32 z, muf_f32 w);
 MufQuat4 mufCreateQuat4AR();
 
-#pragma region MUF_MATRIX
 typedef union MufMat2_u {
 	muf_f32 values[2][2];
     struct { MufVec2 v0, v1; } columns;
@@ -462,8 +460,6 @@ MUF_API MufVec4 mufVec4MulMat(MufVec4 vec, const MufMat4 *mat);
 MUF_API MufVec2 mufMat2MulVec(const MufMat2 *mat, MufVec2 vec);
 MUF_API MufVec3 mufMat3MulVec(const MufMat3 *mat, MufVec3 vec);
 MUF_API MufVec4 mufMat4MulVec(const MufMat4 *mat, MufVec4 vec);
-
-#pragma endregion
 
 MUF_API MufMat4 *mufRotateX(MufMat4 *base, muf_f32 rotation);
 MUF_API MufMat4 *mufRotateY(MufMat4 *base, muf_f32 rotation);

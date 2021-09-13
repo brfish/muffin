@@ -60,8 +60,8 @@ MUF_INTERNAL void _mufInitMT19937(MufMT19937 *generator, muf_u32 seed) {
     generator->seed = seed;
     generator->mt[0] = seed;
 
-    for (muf_index i = 0; i < 624; ++i) {
-        generator->mt[i] = (muf_u32) (0xFFFFFFFF & (0x6C078965 * generator->mt[i - 1] ^ (generator->mt[i - 1] >> 30) + i));
+    for (muf_index i = 1; i < 624; ++i) {
+        generator->mt[i] = (muf_u32) (0xFFFFFFFF & (0x6C078965 * (generator->mt[i - 1] ^ (generator->mt[i - 1] >> 30)) + i));
     }
 }
 
@@ -105,11 +105,17 @@ muf_u32 mufMT19937Next(MufMT19937 *generator) {
 }
 
 muf_i32 mufRandomRange(MufMT19937 *generator, muf_i32 minValue, muf_i32 maxValue) {
+    if (minValue < maxValue) {
+        mufSwapInt(minValue, maxValue);
+    }
     muf_u32 v = mufMT19937Next(generator);
-    return (muf_i32) mufRandomRangef(generator, (muf_f32) minValue, (muf_f32) maxValue);
+    return (v % (maxValue - minValue + 1)) + minValue;
 }
 
 muf_f32 mufRandomRangef(MufMT19937 *generator, muf_f32 minValue, muf_f32 maxValue) {
+    if (minValue > maxValue) {
+        mufSwap(muf_f32, minValue, maxValue);
+    }
     muf_u32 v = mufMT19937Next(generator);
     return minValue + (((muf_f32) v) / UINT32_MAX) * (maxValue - minValue);
 }
@@ -692,7 +698,6 @@ MufMat3 mufMat3Mul(const MufMat3 *m1, const MufMat3 *m2) {
 }
 
 MufMat4 mufMat4Mul(const MufMat4 *m1, const MufMat4 *m2) {
-    const muf_f32 (*a)[4] = m1->values;
     const muf_f32 (*b)[4] = m2->values;
 
     const MufVec4 a0 = m1->columns.v0;

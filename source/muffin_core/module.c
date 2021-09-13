@@ -30,6 +30,7 @@ static _MufModuleManager *_mufCreateModuleManager() {
     _MufModuleManager *manager = mufAlloc(_MufModuleManager, 1);
     manager->names = mufCreateArray(const muf_char *);
     manager->modules = mufCreateDict(_MufModule);
+    return manager;
 }
 
 static void _mufDestroyModuleManager(_MufModuleManager *manager) {
