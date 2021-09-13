@@ -6,13 +6,17 @@
 
 #include "muffin_core/common.h"
 
-typedef muf_rawptr(* MufAllocCallback)(muf_usize size, muf_rawptr userData);
-typedef void(* MufDeallocCallback)(muf_rawptr ptr, muf_rawptr userData);
+typedef MufUnaryFunc(MufAllocCallback, muf_rawptr, muf_usize);
+typedef MufUnaryFunc(MufDeallocCallback, void, muf_rawptr);
+typedef MufBinary2Func(MufReallocCallback, muf_rawptr, muf_rawptr, muf_usize);
 
-typedef struct MufAllocator_s {
-    MufAllocCallback alloc;
-    MufDeallocCallback dealloc;
-} MufAllocator;
+typedef struct MufAllocatorCallbacks_s {
+    MufAllocCallback    alloc;
+    MufDeallocCallback  dealloc;
+    MufReallocCallback  realloc;
+} MufAllocatorCallbacks;
+
+extern MufAllocatorCallbacks MUF_DEFAULT_ALLOCATOR[1];
 
 #define mufAlignOf()
 
