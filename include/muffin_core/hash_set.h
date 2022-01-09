@@ -7,15 +7,15 @@
 typedef struct MufHashSet_s MufHashSet;
 
 typedef struct MufHashSetConfig_s {
-    muf_usize elementSize;
-    MufEqualityComparator equal;
-    MufHash hash;
-    muf_usize initBucketCount;
+    muf_usize                   elementSize;
+    MufEqualityComparator       equal;
+    MufHash                     hash;
+    muf_usize                   initBucketCount;
 } MufHashSetConfig;
 
 MUF_API MufHashSet *_mufCreateHashSet(muf_usize elementSize, MufEqualityComparator equal, MufHash hash);
 
-#define mufCreateHashSet(Type, Equal, Hash) _mufCreateHashSet(sizeof(Type), Equal, Hash)
+#define mufCreateHashSet(_type, _equal, _hash) _mufCreateHashSet(sizeof(_type), _equal, _hash)
 
 MUF_API void mufInitHashSet(MufHashSet *set, const MufHashSetConfig *config);
 
@@ -52,16 +52,16 @@ MUF_API void mufHashSetRehash(MufHashSet *set, muf_usize newBucketCount);
 void mufHashSetForEach(MufHashSet *set, void (*unaryFunc)(muf_rawptr item));
 
 #if defined(__GNUC__)
-#   define mufHashSetFind_L(Set, Item) \
-        ({ __typeof__(Item) tmp = Item; mufHashSetFind(Set, &tmp); })
-#   define mufHashSetContains_L(Set, Item) \
-        ({ __typeof__(Item) tmp = Item; mufHashSetContains(Set, &tmp); })
-#   define mufHashSetInsert_L(Set, Item) \
-        ({ __typeof__(Item) tmp = Item; mufHashSetInsert(Set, &tmp); })
-#   define mufHashSetInsertOrAssign_L(Set, Item) \
-        do { __typeof__(Item) tmp = Item; mufHashSetInsertOrAssign(Set, &tmp); } while (0)
-#   define mufHashSetRemove_L(Set, Item) \
-        ({ __typeof__(Item) tmp = Item; mufHashSetRemove(Set, &tmp); })
+#   define mufHashSetFind_L(_set, _item) \
+        ({ __typeof__(_item) tmp = _item; mufHashSetFind(_set, &tmp); })
+#   define mufHashSetContains_L(_set, _item) \
+        ({ __typeof__(_item) tmp = _item; mufHashSetContains(_set, &tmp); })
+#   define mufHashSetInsert_L(_set, _item) \
+        ({ __typeof__(_item) tmp = _item; mufHashSetInsert(_set, &tmp); })
+#   define mufHashSetInsertOrAssign_L(_set, _item) \
+        do { __typeof__(_item) tmp = _item; mufHashSetInsertOrAssign(_set, &tmp); } while (0)
+#   define mufHashSetRemove_L(_set, _item) \
+        ({ __typeof__(_item) tmp = _item; mufHashSetRemove(_set, &tmp); })
 #endif
 
 #define mufCreateHashSet_i8 () mufCreateHashSet(muf_i8,  mufEqual_i8,  mufHash_i8 )

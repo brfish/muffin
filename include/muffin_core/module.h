@@ -3,16 +3,16 @@
 
 #include "muffin_core/common.h"
 
-#define MUF_MODULE_REGISTRY_DECLARE(ModuleName) extern MufModuleRegistry _muf_module_##ModuleName[1]
+#define MUF_MODULE_REGISTRY_DECLARE(_moduleName) extern MufModuleRegistry _muf_module_##_moduleName[1]
 
-#define MUF_MODULE_REGISTRY_DEF(ModuleName, IdentifyName, Description, Version, Priority, Load, Unload) \
-    MufModuleRegistry _muf_module_##ModuleName[1] = {{ \
-        .name = IdentifyName, \
-        .description = Description, \
-        .version = Version, \
-        .priority = Priority, \
-        .loadCallback = Load, \
-        .unloadCallback = Unload \
+#define MUF_MODULE_REGISTRY_DEF(_moduleName, _identifyName, _description, _version, _priority, _load, _unload) \
+    MufModuleRegistry _muf_module_##_moduleName[1] = {{ \
+        .name = _identifyName, \
+        .description = _description, \
+        .version = _version, \
+        .priority = _priority, \
+        .loadCallback = _load, \
+        .unloadCallback = _unload \
     }}
 
 enum {

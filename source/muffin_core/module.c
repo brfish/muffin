@@ -1,6 +1,7 @@
 #include "muffin_core/module.h"
 
 #include <stdarg.h>
+#include <time.h>
 
 #include "muffin_core/array.h"
 #include "muffin_core/dict.h"
@@ -53,6 +54,7 @@ static void _mufModuleManagerRegister(_MufModuleManager *manager, const MufModul
     mod.status = MUF_MODULE_STATUS_READY;
     mod.loadCallback = registry->loadCallback;
     mod.unloadCallback = registry->unloadCallback;
+    mod.loadTime = 0;
 
     _MufModule *target = (_MufModule *) mufDictInsert(_manager->modules, name, &mod);
     const muf_char *nameBuffer = target->name;
@@ -74,6 +76,7 @@ static MUF_INLINE void _mufModuleManagerLoad(_MufModuleManager *manager, _MufMod
         return;
     }
 
+    mod->loadTime = (muf_u64) time(NULL);
     if (mod->loadCallback) {
         mod->loadCallback();
     }
@@ -112,7 +115,7 @@ muf_usize mufGetModuleNames(const muf_char **names) {
     return 0;
 }
 
-#define _MOD(Handle) ((_MufModule *) Handle._ptr)
+#define _MOD(_handle) ((_MufModule *) _handle._ptr)
 
 void mufLoadModule(MufModule mod) {
     _mufModuleManagerLoad(_mufGetModuleManager(), _MOD(mod));

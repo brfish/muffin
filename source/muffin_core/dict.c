@@ -4,11 +4,11 @@
 #include "muffin_core/memory.h"
 #include "muffin_core/string.h"
 
-#define _TABLE(Ptr) ((MufHashTable *)(Ptr))
+#define _TABLE(_ptr) ((MufHashTable *)(_ptr))
 
 typedef struct _MufStrWrapper_s {
     muf_usize length;
-    muf_char  *data;
+    muf_char *data;
 } _MufStrWrapper;
 
 static muf_rawptr _mufDictKeyExtract(MufHashTableNode *node) {

@@ -3,7 +3,7 @@
 #include "internal/hash_table.h"
 #include "muffin_core/memory.h"
 
-#define _TABLE(Ptr) ((MufHashTable *)(Ptr))
+#define _TABLE(_ptr) ((MufHashTable *)(_ptr))
 
 static muf_rawptr _mufHashMapKeyExtract(MufHashTableNode *node) {
     return MUF_RAWPTR_AT((muf_rawptr) node, sizeof(MufHashTableNode), 1);

@@ -4,7 +4,7 @@
 
 extern _MufRenderBackendManager *_mufRenderBackendManager;
 
-#define _MUF_BACKEND_CMD_CALL(Func, ...) do { _MUF_CHECK_BACKEND(); _mufRenderBackendManager->defaultBackend->api.cmd.Func(__VA_ARGS__); } while (0)
+#define _MUF_BACKEND_CMD_CALL(_func, ...) do { _MUF_CHECK_BACKEND(); _mufRenderBackendManager->defaultBackend->api.cmd._func(__VA_ARGS__); } while (0)
 
 void mufCmdCopyBuffer(MufBuffer dst, muf_offset dstOffset, MufBuffer src, muf_offset srcOffset, muf_usize size) {
     _MUF_BACKEND_CMD_CALL(copyBuffer, dst, dstOffset, src, srcOffset, size);

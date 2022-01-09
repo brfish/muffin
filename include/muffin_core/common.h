@@ -81,12 +81,12 @@
 #   define MUF_INTERNAL static
 #endif
 
-#define MUF_UNUSED(Variable) ((void) Variable)
+#define MUF_UNUSED(_variable) ((void) _variable)
 
 #if defined(_countof)
-#   define MUF_COUNTOF(Array) _countof(Array)
+#   define MUF_COUNTOF(_array) _countof(_array)
 #else
-#   define MUF_COUNTOF(Array) (sizeof(Array) / sizeof(Array[0]))
+#   define MUF_COUNTOF(_array) (sizeof(_array) / sizeof(_array[0]))
 #endif
 
 #if defined(MUF_COMPILER_GCC)
@@ -159,59 +159,36 @@ typedef const void* muf_crawptr;
 
 typedef muf_u32 muf_result;
 
-/*
-|  16 bits  |  16 bits  |
-|  category |    code   |
-*/
-
-MUF_INLINE muf_u16 mufResultCategory(muf_result result) {
-    return result >> 16;
-}
-
-MUF_INLINE muf_u16 mufResultCode(muf_result result) {
-    return result & 0xFFFF;
-}
-
-#define MUF_RESULT_CATEGORY_COMMON 0
-
-#define MUF_RESULT_DEF(Name, Category, Code) \
-    enum { MUF_RESULT_##Name = (MUF_RESULT_CATEGORY_##Category << 16) | Code }
-
-MUF_RESULT_DEF(PARSE, COMMON, 1);
-
-#define MufResult(Type, ResultCode) struct { \
-        T1 first; T2 second; \
-    };
-
 void _mufAssertFormatPrint(const muf_char *filename, muf_index line,
     const muf_char *expression, const muf_char *format, ...);
 
 #if defined(MUF_DEBUG)
-#   define MUF_ASSERT(Expr) \
-        do { if (!(Expr)) { _mufAssertFormatPrint(__FILE__, __LINE__, #Expr, "Assertion failed"); MUF_DEBUGBREAK(); } } while (0)
-#   define MUF_FASSERT(Expr, Fmt, ...) \
-        do { if (!(Expr)) { _mufAssertFormatPrint(__FILE__, __LINE__, #Expr, (Fmt), ##__VA_ARGS__); MUF_DEBUGBREAK(); } } while (0)
-#   define MUF_CHECK(Expr) \
-        do { if (!(Expr)) { _mufAssertFormatPrint(__FILE__, __LINE__, #Expr, "Check failed"); } } while (0)
-#   define MUF_FCHECK(Expr, Fmt, ...) \
-        do { if (!(Expr)) { _mufAssertFormatPrint(__FILE__, __LINE__, #Expr, (Fmt), ##__VA_ARGS__); } } while (0)
+#   define MUF_ASSERT(_expr) \
+        do { if (!(_expr)) { _mufAssertFormatPrint(__FILE__, __LINE__, #_expr, "Assertion failed"); MUF_DEBUGBREAK(); } } while (0)
+#   define MUF_FASSERT(_expr, _fmt, ...) \
+        do { if (!(_expr)) { _mufAssertFormatPrint(__FILE__, __LINE__, #_expr, (_fmt), ##__VA_ARGS__); MUF_DEBUGBREAK(); } } while (0)
+#   define MUF_CHECK(_expr) \
+        do { if (!(_expr)) { _mufAssertFormatPrint(__FILE__, __LINE__, #_expr, "Check failed"); } } while (0)
+#   define MUF_FCHECK(_expr, _fmt, ...) \
+        do { if (!(_expr)) { _mufAssertFormatPrint(__FILE__, __LINE__, #_expr, (_fmt), ##__VA_ARGS__); } } while (0)
 #   define MUF_UNREACHABLE() \
         do { _mufAssertFormatPrint(__FILE__, __LINE__, NULL, "Unreachable"); MUF_DEBUGBREAK(); } while (0)
-
+#   define MUF_FUNREACHABLE(_fmt, ...) \
+        do { _mufAssertFormatPrint(__FILE__, __LINE__, NULL, _fmt, ##__VA_ARGS__); MUF_DEBUGBREAK(); } while (0)
 #else
-#   define MUF_ASSERT(Expr)
-#   define MUF_FASSERT(Expr, Fmt, ...)
-#   define MUF_CHECK(Expr)
-#   define MUF_FCHECK(Expr, Fmt, ...)
+#   define MUF_ASSERT(_expr)
+#   define MUF_FASSERT(_expr, _fmt, ...)
+#   define MUF_CHECK(_expr)
+#   define MUF_FCHECK(_expr, _fmt, ...)
 #   define MUF_UNREACHABLE()
 #endif
 
-#define MUF_STRUCT_TYPEDEF(TypeName) typedef struct TypeName##_s TypeName
-#define MUF_UNION_TYPEDEF(TypeName) typedef union TypeName##_u TypeName
-#define MUF_ENUM_TYPEDEF(TypeName) typedef enum TypeName##_e TypeName
+#define MUF_STRUCT_TYPEDEF(_typeName) typedef struct _typeName##_s _typeName
+#define MUF_UNION_TYPEDEF(_typeName) typedef union _typeName##_u _typeName
+#define MUF_ENUM_TYPEDEF(_typeName) typedef enum _typeName##_e _typeName
 
-#define MUF_ENUM_UNKNOWN(EnumName) _##EnumName##_UNKNOWN_ = 0U
-#define MUF_ENUM_COUNT(EnumName) _##EnumName##_COUNT_
+#define MUF_ENUM_UNKNOWN(_enumName) _##_enumName##_UNKNOWN_ = 0U
+#define MUF_ENUM_COUNT(_enumName) _##_enumName##_COUNT_
 
 typedef enum MufHandleType_e {
     MUF_HANDLE_TYPE_PTR,
@@ -229,24 +206,24 @@ typedef struct MufHandle_s {
     muf_i64     _i64;
 } MufHandle;
 
-#define MUF_HANDLE_DEF(Name) typedef union Name##_u { \
-    muf_rawptr _ptr; \
-    muf_u32 _u32; \
-    muf_i32 _i32; \
-    muf_u64 _u64; \
-    muf_i64 _i64; \
-} Name;
+#define MUF_HANDLE_DEF(_name) typedef union _name##_u { \
+    muf_rawptr  _ptr; \
+    muf_u32     _u32; \
+    muf_i32     _i32; \
+    muf_u64     _u64; \
+    muf_i64     _i64; \
+} _name;
 
-#define mufMakeHandle(HandleType, Suffix, Value) ((HandleType) { ._##Suffix = Value })
-#define mufNullHandle(HandleType) ((HandleType) { 0 })
-#define mufIsNullHandle(Handle) (Handle._ptr == 0)
-#define mufHandleCastPtr(Type, Handle) ((Type *)Handle._ptr)
-#define mufHandleCastRawptr(Handle) (Handle._ptr)
-#define mufHandleCastU32(Handle) (Handle._u32)
-#define mufHandleCastI32(Handle) (Handle._i32)
-#define mufHandleCastU64(Handle) (Handle._u64)
-#define mufHandleCastI64(Handle) (Handle._i64)
-#define mufHandleCastCommon(Handle) ((MufHandle *) (&Handle))
+#define mufMakeHandle(_handleType, _suffix, _value) ((_handleType) { ._##_suffix = _value })
+#define mufNullHandle(_handleType) ((_handleType) { 0 })
+#define mufIsNullHandle(_handle) (_handle._ptr == 0)
+#define mufHandleCastPtr(_type, _handle) ((_type *)_handle._ptr)
+#define mufHandleCastRawptr(_handle) (_handle._ptr)
+#define mufHandleCastU32(_handle) (_handle._u32)
+#define mufHandleCastI32(_handle) (_handle._i32)
+#define mufHandleCastU64(_handle) (_handle._u64)
+#define mufHandleCastI64(_handle) (_handle._i64)
+#define mufHandleCastCommon(_handle) ((MufHandle *) (&_handle))
 
 typedef struct MufPixels_s {
     muf_u32     width;
@@ -270,18 +247,18 @@ typedef struct MufPixels_s {
 #define MUF_I32_MIN (-2147483647 - 1)
 #define MUF_I64_MIN (-9223372036854775807LL - 1)
 
-#define MufGeneratorFunc(Name, ResultType) ResultType(*Name)(void)
-#define MufUnaryFunc(Name, ResultType, ParamType) ResultType(*Name)(ParamType) 
-#define MufBinaryFunc(Name, ResultType, ParamType) ResultType(*Name)(ParamType, ParamType)
-#define MufBinary2Func(Name, ResultType, ParamType1, ParamType2) ResultType(*Name)(ParamType1, ParamType2)
+#define MufGeneratorFunc(_name, _retType) _retType(*_name)(void)
+#define MufUnaryFunc(_name, _retType, _paramType) _retType(*_name)(_paramType) 
+#define MufBinaryFunc(_name, _retType, _paramType) _retType(*_name)(_paramType, _paramType)
+#define MufBinary2Func(_name, _retType, _paramType0, _paramType1) _retType(*_name)(_paramType0, _paramType1)
 
 typedef MufBinaryFunc(MufComparator, muf_i32, muf_crawptr);
 typedef MufBinaryFunc(MufEqualityComparator, muf_bool, muf_crawptr);
 typedef MufUnaryFunc(MufInitializer, void, muf_rawptr);
 typedef MufUnaryFunc(MufDestructor, void, muf_rawptr);
 
-#define MUF_RAWPTR_AT(Ptr, Stride, Count) ((muf_rawptr)(((muf_byte *)(Ptr)) + (Stride) * (Count)))
-#define MUF_RAWPTR_TYPE_AT(Ptr, Type, Count) (Type*)(MUF_RAWPTR_AT(Ptr, sizeof(Type), Count))
+#define MUF_RAWPTR_AT(_ptr, _stride, _count) ((muf_rawptr)(((muf_byte *)(_ptr)) + (_stride) * (_count)))
+#define MUF_RAWPTR_TYPE_AT(_ptr, _type, _count) (_type*)(MUF_RAWPTR_AT(_ptr, sizeof(_type), _count))
 
 MUF_API muf_bool mufEqual_i8 (muf_crawptr a, muf_crawptr b);
 MUF_API muf_bool mufEqual_i16(muf_crawptr a, muf_crawptr b);
@@ -296,13 +273,13 @@ MUF_API muf_bool mufEqual_ptr(muf_crawptr a, muf_crawptr b);
 
 void mufPrintln(const muf_char *format, ...);
 
-/* | (Major) 10 bits | (Minor) 10 bits | (Patch) 12 bits | */
+/* | (_major) 10 bits | (_minor) 10 bits | (_patch) 12 bits | */
 typedef muf_u32 MufVersion;
 
-#define mufCreateVersion(Major, Minor, Patch) (((Major) << 22) | ((Minor) << 12) | (Patch))
-#define mufVersionGetMajor(Version) ((muf_u32)((Version) >> 22))
-#define mufVersionGetMinor(Version) ((muf_u32)(((Version) >> 12)) & 0x3FF)
-#define mufVersionGetPatch(Version) ((muf_u32)((Version) & 0xFFF))
+#define mufCreateVersion(_major, _minor, _patch) (((_major) << 22) | ((_minor) << 12) | (_patch))
+#define mufVersionGetMajor(_version) ((muf_u32)((_version) >> 22))
+#define mufVersionGetMinor(_version) ((muf_u32)(((_version) >> 12)) & 0x3FF)
+#define mufVersionGetPatch(_version) ((muf_u32)((_version) & 0xFFF))
 
 MUF_API void mufVersionToString(MufVersion version, muf_char *strBuf);
 

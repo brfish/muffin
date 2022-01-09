@@ -3,8 +3,8 @@
 #include "internal/hash_table.h"
 #include "muffin_core/memory.h"
 
-#define _CTABLE(Ptr) ((const MufHashTable *) Ptr)
-#define _TABLE(Ptr) ((MufHashTable *) Ptr)
+#define _CTABLE(_ptr) ((const MufHashTable *) _ptr)
+#define _TABLE(_ptr) ((MufHashTable *) _ptr)
 
 MUF_INTERNAL muf_rawptr _mufHashSetKeyExtract(MufHashTableNode *node) {
     return MUF_RAWPTR_AT((muf_rawptr) node, sizeof(MufHashTableNode), 1);

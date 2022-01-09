@@ -7,7 +7,7 @@ typedef struct MufDict_s MufDict;
 
 MUF_API MufDict *_mufCreateDict(muf_usize valueSize);
 
-#define mufCreateDict(ValueType) _mufCreateDict(sizeof(ValueType))
+#define mufCreateDict(_valueType) _mufCreateDict(sizeof(_valueType))
 
 MUF_API void mufCloneDict(MufDict *dict);
 
@@ -30,6 +30,9 @@ MUF_API void mufDictInsertOrAssign(MufDict *dict, const muf_char *key, muf_crawp
 MUF_API void mufDictPut(MufDict *dict, const muf_char *key, muf_crawptr value);
 
 MUF_API muf_bool mufDictRemove(MufDict *dict, const muf_char *key);
+
+#define mufDictRemoveX(_dict, _key, _destroy) \
+    do { muf_rawptr v = mufDictGetRef(_dict, _key); mufDictRemove(_dict, _key); _destroy(v); } while (0)
 
 MUF_API void mufDictClear(MufDict *dict);
 

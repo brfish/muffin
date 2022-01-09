@@ -7,16 +7,16 @@
 typedef struct MufHashMap_s MufHashMap;
 
 typedef struct MufHashMapConfig_s {
-    muf_usize keySize;
-    muf_usize valueSize;
-    MufEqualityComparator equal;
-    MufHash hash;
+    muf_usize                   keySize;
+    muf_usize                   valueSize;
+    MufEqualityComparator       equal;
+    MufHash                     hash;
 } MufHashMapConfig;
 
 MUF_API MufHashMap *_mufCreateHashMap(muf_usize keySize, muf_usize valueSize,
     MufEqualityComparator equal, MufHash hash);
 
-#define mufCreateHashMap(KeyType, ValueType, Equal, Hash) _mufCreateHashMap(sizeof(KeyType), sizeof(ValueType), Equal, Hash) 
+#define mufCreateHashMap(_keyType, _valueType, _equal, _hash) _mufCreateHashMap(sizeof(_keyType), sizeof(_valueType), _equal, _hash) 
 
 MUF_API void mufInitHashMap(MufHashMap *map, const MufHashMapConfig *config);
 
@@ -55,31 +55,31 @@ MUF_API void mufHashMapClear(MufHashMap *map);
 MUF_API void mufHashMapForEach(MufHashMap *map, MufBinary2Func(func, void, muf_crawptr, muf_rawptr));
 
 #if defined(__GNUC__)
-#   define mufHashMapGet_L(Map, Key, Out) \
-        ({ __typeof__(Key) k = Key; mufHashMapGet(Map, &k, Out); })
-#   define mufHashMapGetRef_L(Map, Key, Out) \
-        ({ __typeof__(Key) k = Key; mufHashMapGetRef(Map, &k, Out); })
-#   define mufHashMapGetCRef_L(Map, Key, Out) \
-        ({ __typeof__(Key) k = Key; mufHashMapGetCRef(Map, &k, Out); })
-#   define mufHashMapContains_L(Map, Key) \
-        ({ __typeof__(Key) k = Key; mufHashMapContains(Map, &k); })
-#   define mufHashMapInsert_L(Map, Key, Value) \
-        ({ __typeof__(Key) k = Key; __typeof__(Value) v = Value; mufHashMapInsert(Map, &k, &v); })
-#   define mufHashMapInsertOrAssign_L(Map, Key, Value) \
-        do { __typeof__(Key) k = Key; __typeof__(Value) v = Value; mufHashMapInsertOrAssign(Map, &k, &v); } while (0)
-#   define mufHashMapSet_L(Map, Key, NewValue) \
-        do { __typeof__(Key) k = Key; __typeof__(Value) v = Value; mufHashMapSet(Map, &k, &v); } while (0)
-#   define mufHashMapRemove_L(Map, Key) \
-        ({ __typeof__(Key) k = Key; mufHashMapRemove(Map, &k); })
+#   define mufHashMapGet_L(_map, _key, _out) \
+        ({ __typeof__(_key) k = _key; mufHashMapGet(_map, &k, _out); })
+#   define mufHashMapGetRef_L(_map, _key, _out) \
+        ({ __typeof__(_key) k = _key; mufHashMapGetRef(_map, &k, _out); })
+#   define mufHashMapGetCRef_L(_map, _key, _out) \
+        ({ __typeof__(_key) k = _key; mufHashMapGetCRef(_map, &k, _out); })
+#   define mufHashMapContains_L(_map, _key) \
+        ({ __typeof__(_key) k = _key; mufHashMapContains(_map, &k); })
+#   define mufHashMapInsert_L(_map, _key, _value) \
+        ({ __typeof__(_key) k = _key; __typeof__(_value) v = _value; mufHashMapInsert(_map, &k, &v); })
+#   define mufHashMapInsertOrAssign_L(_map, _key, _value) \
+        do { __typeof__(_key) k = _key; __typeof__(_value) v = _value; mufHashMapInsertOrAssign(_map, &k, &v); } while (0)
+#   define mufHashMapSet_L(_map, _key, NewValue) \
+        do { __typeof__(_key) k = _key; __typeof__(_value) v = _value; mufHashMapSet(_map, &k, &v); } while (0)
+#   define mufHashMapRemove_L(_map, _key) \
+        ({ __typeof__(_key) k = _key; mufHashMapRemove(_map, &k); })
 #endif
 
-#define mufCreateHashMap_i8 (ValueType) mufCreateHashMap(muf_i8,  ValueType, mufEqual_i8,  mufHash_i8)
-#define mufCreateHashMap_i16(ValueType) mufCreateHashMap(muf_i16, ValueType, mufEqual_i16, mufHash_i16)
-#define mufCreateHashMap_i32(ValueType) mufCreateHashMap(muf_i32, ValueType, mufEqual_i32, mufHash_i32)
-#define mufCreateHashMap_i64(ValueType) mufCreateHashMap(muf_i64, ValueType, mufEqual_i64, mufHash_i64)
-#define mufCreateHashMap_u8 (ValueType) mufCreateHashMap(muf_u8,  ValueType, mufEqual_u8,  mufHash_u8)
-#define mufCreateHashMap_u16(ValueType) mufCreateHashMap(muf_u16, ValueType, mufEqual_u16, mufHash_u16)
-#define mufCreateHashMap_u32(ValueType) mufCreateHashMap(muf_u32, ValueType, mufEqual_u32, mufHash_u32)
-#define mufCreateHashMap_u64(ValueType) mufCreateHashMap(muf_u64, ValueType, mufEqual_u64, mufHash_u64)
+#define mufCreateHashMap_i8 (_valueType) mufCreateHashMap(muf_i8,  _valueType, mufEqual_i8,  mufHash_i8)
+#define mufCreateHashMap_i16(_valueType) mufCreateHashMap(muf_i16, _valueType, mufEqual_i16, mufHash_i16)
+#define mufCreateHashMap_i32(_valueType) mufCreateHashMap(muf_i32, _valueType, mufEqual_i32, mufHash_i32)
+#define mufCreateHashMap_i64(_valueType) mufCreateHashMap(muf_i64, _valueType, mufEqual_i64, mufHash_i64)
+#define mufCreateHashMap_u8 (_valueType) mufCreateHashMap(muf_u8,  _valueType, mufEqual_u8,  mufHash_u8)
+#define mufCreateHashMap_u16(_valueType) mufCreateHashMap(muf_u16, _valueType, mufEqual_u16, mufHash_u16)
+#define mufCreateHashMap_u32(_valueType) mufCreateHashMap(muf_u32, _valueType, mufEqual_u32, mufHash_u32)
+#define mufCreateHashMap_u64(_valueType) mufCreateHashMap(muf_u64, _valueType, mufEqual_u64, mufHash_u64)
 
 #endif

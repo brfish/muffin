@@ -51,32 +51,32 @@ static MUF_INLINE muf_f64 mufMinlf(muf_f64 value1, muf_f64 value2) {
 
 /**
  * Get the larger of two numbers
- * @note The complex expression of Value1 or Value2 may
+ * @note The complex expression of _value1 or _value2 may
  *       lead to redundant calculations and unexpected result
- * @param Value1 First number
- * @param Value2 Second number
+ * @param _value1 First number
+ * @param _value2 Second number
  * @return The larger one
  */
-#define mufMax(Value1, Value2) ((Value1) > (Value2) ? Value1 : Value2)
+#define mufMax(_value1, _value2) ((_value1) > (_value2) ? _value1 : _value2)
 
 /**
  * Get the smaller of two numbers
- * @note The complex expression of Value1 or Value2 may
+ * @note The complex expression of _value1 or _value2 may
  *       lead to redundant calculations and unexpected result
- * @param Value1 First number
- * @param Value2 Second number
+ * @param _value1 First number
+ * @param _value2 Second number
  * @return The smaller one
  */
-#define mufMin(Value1, Value2) ((Value1) < (Value2) ? Value1 : Value2)
+#define mufMin(_value1, _value2) ((_value1) < (_value2) ? _value1 : _value2)
 
 /**
  * Clamp the value within the range of [min, max]
- * @param Value The number
- * @param MinV The lower limit of range
- * @param MaxV the upper limit of range
+ * @param _value The number
+ * @param _minv The lower limit of range
+ * @param _maxv the upper limit of range
  * @return The result value in [min, max]
  */
-#define mufClamp(Value, MinV, MaxV) (mufMax(mufMin(Value, MaxV), MinV))
+#define mufClamp(_value, _minv, _maxv) (mufMax(mufMin(_value, _maxv), _minv))
 
 static MUF_INLINE muf_f32 mufClampf(muf_f32 value, muf_f32 minv, muf_f32 maxv) {
 	return mufMaxf(mufMinf(value, maxv), minv);
@@ -87,33 +87,33 @@ static MUF_INLINE muf_f64 mufClamplf(muf_f64 value, muf_f64 minv, muf_f64 maxv) 
 }
 
 /**
- * Clamp(Value, 0, 1)
- * @param Value the number
+ * Clamp(_value, 0, 1)
+ * @param _value the number
  * @return The clamp result
  */
-#define mufSaturate(Value) mufClamp(Value, 0, 1)
+#define mufSaturate(_value) mufClamp(_value, 0, 1)
 
 /**
  * Get the sign of number. The number must be signed
- * @param Value The signed number
+ * @param _value The signed number
  * @return -1 if the value less than 0, 0 if the value equals to 0 and 1 if the value larger than 0
  */
-#define mufSign(Value) (((Value) > 0) - ((Value) < 0))
+#define mufSign(_value) (((_value) > 0) - ((_value) < 0))
 
 /**
  * Get the absolute value
- * @param Value The number
+ * @param _value The number
  * @return The absolute value
  */
-#define mufAbs(Value) ((Value) < 0 ? -(Value) : (Value))
+#define mufAbs(_value) ((_value) < 0 ? -(_value) : (_value))
 
-#define mufAbsf(Value) ((muf_f32) fabs(Value))
+#define mufAbsf(_value) ((muf_f32) fabs(_value))
 
-#define mufAbslf(Value) fabs(Value)
+#define mufAbslf(_value) fabs(_value)
 
-#define mufSwapInt(A, B) (((A) ^ (B)) && ((B) ^= (A) ^= (B), (A) ^= (B)))
+#define mufSwapInt(_a, _b) (((_a) ^ (_b)) && ((_b) ^= (_a) ^= (_b), (_a) ^= (_b)))
 
-#define mufSwap(Type, A, B) do { Type tmp = A; A = B; B = tmp; } while (0)
+#define mufSwap(_type, _a, _b) do { _type tmp = _a; _a = _b; _b = tmp; } while (0)
 
 MUF_API muf_bool mufFloatEqualEpsilon(muf_f64 a, muf_f64 b, muf_f64 epsilon);
 
@@ -326,11 +326,11 @@ MUF_API muf_f32 mufVec3Length(MufVec3 v);
 MUF_API MufVec2 mufVec2Normalize(MufVec2 v);
 MUF_API MufVec3 mufVec3Normalize(MufVec3 v);
 
-#define mufVecCast_2_3(V) (MufVec2) { V.x, V.y }
-#define mufVecCast_2_4(V) mufVecCast_2_3(V)
-#define mufVecCast_3_2(V) (MufVec3) { V.x, V.y, 0.0F }
+#define mufVecCast_2_3(_v) (MufVec2) { _v.x, _v.y }
+#define mufVecCast_2_4(_v) mufVecCast_2_3(_v)
+#define mufVecCast_3_2(_v) (MufVec3) { _v.x, _v.y, 0.0F }
 
-#define mufVecCast(DstDimension, SrcDimension, Value)
+#define mufVecCast(_dstDimension, _srcDimension, _value)
 
 typedef struct MufColor_s {
 	muf_f32 r, g, b;
@@ -568,20 +568,33 @@ typedef struct MufOffset3i_s {
 	muf_i32 z;
 } MufOffset3i;
 
-#define MUF_VEC2_ZERO (MufVec2) { 0.0F, 0.0F }
-#define MUF_VEC3_ZERO (MufVec3) { 0.0F, 0.0F, 0.0F }
-#define MUF_VEC4_ZERO (MufVec4) { 0.0F, 0.0F, 0.0F, 0.0F }
+#define MUF_VEC2_ZERO 		(MufVec2) { 0.0F, 0.0F }
+#define MUF_VEC3_ZERO 		(MufVec3) { 0.0F, 0.0F, 0.0F }
+#define MUF_VEC4_ZERO 		(MufVec4) { 0.0F, 0.0F, 0.0F, 0.0F }
 
-#define MUF_VEC2_X_UNIT (MufVec2) { 1.0F, 0.0F };
-#define MUF_VEC2_Y_UNIT (MufVec2) { 0.0F, 1.0F };
+#define MUF_VEC2_X_UNIT 	(MufVec2) { 1.0F, 0.0F }
+#define MUF_VEC2_Y_UNIT 	(MufVec2) { 0.0F, 1.0F }
 
-#define MUF_VEC3_X_UNIT (MufVec3) { 1.0F, 0.0F, 0.0F };
-#define MUF_VEC3_Y_UNIT (MufVec3) { 0.0F, 1.0F, 0.0F };
-#define MUF_VEC3_Z_UNIT (MufVec3) { 0.0F, 0.0F, 1.0F };
+#define MUF_VEC3_X_UNIT 	(MufVec3) { 1.0F, 0.0F, 0.0F }
+#define MUF_VEC3_Y_UNIT 	(MufVec3) { 0.0F, 1.0F, 0.0F }
+#define MUF_VEC3_Z_UNIT 	(MufVec3) { 0.0F, 0.0F, 1.0F }
 
-#define MUF_VEC4_X_UNIT (MufVec4) { 1.0F, 0.0F, 0.0F, 0.0F };
-#define MUF_VEC4_Y_UNIT (MufVec4) { 0.0F, 1.0F, 0.0F, 0.0F };
-#define MUF_VEC4_Z_UNIT (MufVec4) { 0.0F, 0.0F, 1.0F, 0.0F };
-#define MUF_VEC4_W_UNIT (MufVec4) { 0.0F, 0.0F, 0.0F, 1.0F };
+#define MUF_VEC4_X_UNIT  	(MufVec4) { 1.0F, 0.0F, 0.0F, 0.0F }
+#define MUF_VEC4_Y_UNIT  	(MufVec4) { 0.0F, 1.0F, 0.0F, 0.0F }
+#define MUF_VEC4_Z_UNIT  	(MufVec4) { 0.0F, 0.0F, 1.0F, 0.0F }
+#define MUF_VEC4_W_UNIT  	(MufVec4) { 0.0F, 0.0F, 0.0F, 1.0F }
+
+#define MUF_VEC2_RIGHT 		(MufVec2) {  1.0F,  0.0F }
+#define MUF_VEC2_LEFT 		(MufVec2) { -1.0F,  0.0F }
+#define MUF_VEC2_UP 		(MufVec2) {  0.0F,  1.0F }
+#define MUF_VEC2_DOWN 		(MufVec2) {  0.0F, -1.0F }
+
+#define MUF_VEC3_RIGHT 		(MufVec3) {  1.0F,  0.0F,  0.0F }
+#define MUF_VEC3_LEFT 		(MufVec3) { -1.0F,  0.0F,  0.0F }
+#define MUF_VEC3_UP 		(MufVec3) {  0.0F,  1.0F,  0.0F }
+#define MUF_VEC3_DOWN 		(MufVec3) {  0.0F, -1.0F,  0.0F }
+#define MUF_VEC3_FORWARD 	(MufVec3) {  0.0F,  0.0F,  1.0F }
+#define MUF_VEC3_BACK 		(MufVec3) {  0.0F,  0.0F, -1.0F }
+
 
 #endif

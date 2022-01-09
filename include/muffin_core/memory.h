@@ -21,53 +21,53 @@ extern MufAllocatorCallbacks MUF_DEFAULT_ALLOCATOR[1];
 #define mufAlignOf()
 
 /**
- * @brief Allocate a block of memory of size (sizeof(Type) * Count)
- * @param Type The data type to be allocated
- * @param Count The count of elements
+ * @brief Allocate a block of memory of size (sizeof(_type) * _count)
+ * @param _type The data type to be allocated
+ * @param _count The count of elements
  */
-#define mufAlloc(Type, Count) (Type*)malloc(sizeof(Type) * (muf_usize)(Count))
-#define mufRealloc(Type, Ptr, NewCount) (Type*)realloc(Ptr, sizeof(Type) * (muf_usize)(NewCount))
-#define mufAllocZero(Type, Count) (Type*)calloc(Count, sizeof(Type))
+#define mufAlloc(_type, _count) (_type*)malloc(sizeof(_type) * (muf_usize)(_count))
+#define mufRealloc(_type, _ptr, _newCount) (_type*)realloc(_ptr, sizeof(_type) * (muf_usize)(_newCount))
+#define mufAllocZero(_type, _count) (_type*)calloc(_count, sizeof(_type))
 
-#define mufAllocBytes(Count) mufAlloc(muf_byte, Count)
-#define mufReallocBytes(Ptr, NewCount) mufRealloc(muf_byte, Ptr, NewCount)
+#define mufAllocBytes(_count) mufAlloc(muf_byte, _count)
+#define mufReallocBytes(_ptr, _newCount) mufRealloc(muf_byte, _ptr, _newCount)
 
-#define mufAllocAligned(Type, Count, Alignment)
+#define mufAllocAligned(_type, _count, Alignment)
 
-#define mufReallocAligned(Type, Ptr, NewCount, Alignment)
+#define mufReallocAligned(_type, _ptr, _newCount, Alignment)
 
-#define mufAllocZeroAligned(Type, Count, Alignment)
+#define mufAllocZeroAligned(_type, _count, Alignment)
 
 /**
  * @brief Free memory for the given pointer
- * @param Ptr The pointer to a block of memory
+ * @param _ptr The pointer to a block of memory
  */
-#define mufFree(Ptr) free(Ptr);
+#define mufFree(_ptr) free(_ptr);
 
 /**
  * @brief Free memory safely. If the given pointer is NULL, do nothing.
- * @param Ptr The pointer to a block of memory
+ * @param _ptr The pointer to a block of memory
  */
-#define mufSafeFree(Ptr) do { if (Ptr) { free(Ptr); Ptr = NULL; } } while(0)
+#define mufSafeFree(_ptr) do { if (_ptr) { free(_ptr); _ptr = NULL; } } while(0)
 
 /**
  * @brief Fill the memory with the given byte value
- * @param Ptr Specify the pointer to a block of memory
- * @param ByteValue Specify the value to be filled
- * @param Length Specify the length of the memory
+ * @param _ptr Specify the pointer to a block of memory
+ * @param _byteValue Specify the value to be filled
+ * @param _length Specify the length of the memory
  */
-#define mufMemFill(Ptr, ByteValue, Length) memset(Ptr, ByteValue, Length)
+#define mufMemFill(_ptr, _byteValue, _length) memset(_ptr, _byteValue, _length)
 
-#define mufMemCopy(Dst, Src, Type, Count) memcpy(Dst, Src, sizeof(Type) * (muf_usize)(Count))
+#define mufMemCopy(_dst, _src, _type, _count) memcpy(_dst, _src, sizeof(_type) * (muf_usize)(_count))
 
-#define mufMemCopyBytes(Dst, Src, Count) memcpy(Dst, Src, Count);
+#define mufMemCopyBytes(_dst, _src, _count) memcpy(_dst, _src, _count);
 
-#define mufMemMove(Dst, Src, Type, Count) memmove(Dst, Src, sizeof(Type) * (muf_usize)(Count))
+#define mufMemMove(_dst, _src, _type, _count) memmove(_dst, _src, sizeof(_type) * (muf_usize)(_count))
 
-#define mufMemMoveBytes(Dst, Src, Count) memmove(Dst, Src, Count);
+#define mufMemMoveBytes(_dst, _src, _count) memmove(_dst, _src, _count);
 
-#define mufMemCompare(Mem0, Mem1, Size) (memcmp(Mem0, Mem1, (Size)))
+#define mufMemCompare(_ptr0, _ptr1, _size) (memcmp(_ptr0, _ptr1, (_size)))
 
-#define mufMemEqual(Mem0, Mem1, Size) (mufMemCompare(Mem0, Mem1, Size) == 0)
+#define mufMemEqual(_ptr0, _ptr1, _size) (mufMemCompare(_ptr0, _ptr1, _size) == 0)
 
 #endif

@@ -11,7 +11,7 @@ struct MufHashTableNode_s {
     muf_index           hashCode;
 };
 
-#define mufHashTableNodeGetData(Node) MUF_RAWPTR_AT(Node, sizeof(MufHashTableNode), 1)
+#define mufHashTableNodeGetData(_node) MUF_RAWPTR_AT(_node, sizeof(MufHashTableNode), 1)
 
 MufHashTableNode *mufCreateHashTableNode(MufHashTableNode *next, muf_index hashCode, muf_usize dataSize, muf_rawptr data);
 

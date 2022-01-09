@@ -28,7 +28,7 @@ _MufRenderBackend *_mufRenderBackendManagerGetDefault(_MufRenderBackendManager *
 void _mufRenderBackendManagerSetDefault(_MufRenderBackendManager *manager, _MufRenderBackend *backend);
 
 #define _MUF_CHECK_BACKEND() MUF_ASSERT(_mufRenderBackendManager->defaultBackend != NULL)
-#define _MUF_BACKEND_CHECK_CALL(Func, ...) do { _MUF_CHECK_BACKEND(); _mufRenderBackendManager->defaultBackend->api.Func(__VA_ARGS__); } while (0)
-#define _MUF_BACKEND_CALL(Func, ...) _mufRenderBackendManager->defaultBackend->api.Func(__VA_ARGS__)
+#define _MUF_BACKEND_CHECK_CALL(_func, ...) do { _MUF_CHECK_BACKEND(); _mufRenderBackendManager->defaultBackend->api._func(__VA_ARGS__); } while (0)
+#define _MUF_BACKEND_CALL(_func, ...) _mufRenderBackendManager->defaultBackend->api._func(__VA_ARGS__)
 
 #endif

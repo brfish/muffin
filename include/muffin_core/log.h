@@ -41,12 +41,12 @@ MUF_API void mufLoggerEnable(MufLogger *logger, MufLogLevel level);
 MUF_API void mufLoggerDisable(MufLogger *logger, MufLogLevel level);
 
 MUF_API void mufLoggerLog(MufLogger *logger, MufLogLevel level, const muf_char *format, ...);
-#define mufLoggerTrack(Logger, Format, ...) mufLoggerLog(Logger, MUF_LOG_LEVEL_TRACK, __VA_ARGS__)
-#define mufLoggerDebug(Logger, Format, ...) mufLoggerLog(Logger, MUF_LOG_LEVEL_DEBUG, __VA_ARGS__)
-#define mufLoggerInfo(Logger, Format, ...)  mufLoggerLog(Logger, MUF_LOG_LEVEL_INFO , __VA_ARGS__)
-#define mufLoggerWarn(Logger, Format, ...)  mufLoggerLog(Logger, MUF_LOG_LEVEL_WARN , __VA_ARGS__)
-#define mufLoggerError(Logger, Format, ...) mufLoggerLog(Logger, MUF_LOG_LEVEL_ERROR, __VA_ARGS__)
-#define mufLoggerFatal(Logger, Format, ...) mufLoggerLog(Logger, MUF_LOG_LEVEL_FATAL, __VA_ARGS__)
+#define mufLoggerTrack(_logger, _format, ...) mufLoggerLog(_logger, MUF_LOG_LEVEL_TRACK, _format, __VA_ARGS__)
+#define mufLoggerDebug(_logger, _format, ...) mufLoggerLog(_logger, MUF_LOG_LEVEL_DEBUG, _format, __VA_ARGS__)
+#define mufLoggerInfo(_logger, _format, ...)  mufLoggerLog(_logger, MUF_LOG_LEVEL_INFO , _format, __VA_ARGS__)
+#define mufLoggerWarn(_logger, _format, ...)  mufLoggerLog(_logger, MUF_LOG_LEVEL_WARN , _format, __VA_ARGS__)
+#define mufLoggerError(_logger, _format, ...) mufLoggerLog(_logger, MUF_LOG_LEVEL_ERROR, _format, __VA_ARGS__)
+#define mufLoggerFatal(_logger, _format, ...) mufLoggerLog(_logger, MUF_LOG_LEVEL_FATAL, _format, __VA_ARGS__)
 
 MUF_API void mufLog(MufLogLevel level, const muf_char *format, ...);
 #define mufTrack(...) mufLog(MUF_LOG_LEVEL_TRACK, __VA_ARGS__)
@@ -60,13 +60,13 @@ void _mufAssertLogFormatPrint(const muf_char *filename, muf_index line,
     const muf_char *expression, const muf_char *format, ...);
 
 #if defined(MUF_DEBUG)
-#   define MUF_ASSERT_LOG(Expr) \
-        do { if (!(Expr)) { _mufAssertLogFormatPrint(__FILE__, __LINE__, #Expr, "Assertion failed"); MUF_DEBUGBREAK(); } } while (0)
-#   define MUF_FASSERT_LOG(Expr, Fmt, ...) \
-        do { if (!(Expr)) { _mufAssertLogFormatPrint(__FILE__, __LINE__, #Expr, Fmt, ##__VA_ARGS__); MUF_DEBUGBREAK(); } } while (0)
+#   define MUF_ASSERT_LOG(_expr) \
+        do { if (!(_expr)) { _mufAssertLogFormatPrint(__FILE__, __LINE__, #_expr, "Assertion failed"); MUF_DEBUGBREAK(); } } while (0)
+#   define MUF_FASSERT_LOG(_expr, Fmt, ...) \
+        do { if (!(_expr)) { _mufAssertLogFormatPrint(__FILE__, __LINE__, #_expr, Fmt, ##__VA_ARGS__); MUF_DEBUGBREAK(); } } while (0)
 #else
-#   define MUF_ASSERT_LOG(Expr)
-#   define MUF_FASSERT_LOG(Expr, Fmt, ...)
+#   define MUF_ASSERT_LOG(_expr)
+#   define MUF_FASSERT_LOG(_expr, Fmt, ...)
 #endif
 
 void mufSetLogLevel(MufLogLevel level);
